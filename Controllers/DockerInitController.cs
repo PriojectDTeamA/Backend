@@ -15,12 +15,13 @@ public class DockerInitController : ControllerBase
 }
 
 public class DockerTestController : ControllerBase
+// not used
 {
     [Route("DockerTest")]
     [HttpGet]
     public JsonResult Get()
     {
-        string output = DockerBuilder.createDockerFile();
+        string output = DockerBuilder.runDockerFile();
         return new JsonResult(output);
     }
 }
