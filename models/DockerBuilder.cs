@@ -3,7 +3,7 @@ namespace Backend;
 
 public class DockerBuilder
 {
-    public static String working_directory = "./" + new Random().Next().ToString() + "/";
+    public static String working_directory = "./sessions/" + new Random().Next().ToString() + "/";
 
     public static string createDockerFile()
     {
