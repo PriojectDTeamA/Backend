@@ -28,7 +28,7 @@ public class DockerBuilder
             System.Console.WriteLine(e);
             throw;
         }
-        return "";
+        return " ";
     }
     public static string runDockerFile()
     {

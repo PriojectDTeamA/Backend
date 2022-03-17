@@ -454,5 +454,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 ## custom
-./bin/Debug
-./sessions/
+bin/Debug
+sessions/
