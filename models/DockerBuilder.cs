@@ -8,11 +8,20 @@ public class DockerBuilder
     public static string createDockerFile()
     {
         string filename = "main.py";
-        string[] lines = { "FROM python:latest", $"COPY {filename} /", $"CMD [ \"python\", ./{filename} ]" };
+        string[] filelines = { "#!/usr/bin/env python3", "", "print(\"hello world\")" };
+        string[] lines = { "FROM python:latest", $"COPY {filename} /", $"CMD [ \"python\", \"./{filename}\" ]" };
         if (!Directory.Exists(working_directory))
         {
             Directory.CreateDirectory(working_directory);
         }
+
+        // using (StreamWriter codeFile = new StreamWriter(Path.Combine(working_directory, filename)))
+        // {
+        //     foreach (string line in filelines)
+        //         codeFile.WriteLine(line);
+        // }
+
+        File.Move(filename, $"{working_directory}/{filename}");
 
         // Write the string array to a new file named "WriteLines.txt".
         try
@@ -37,14 +46,18 @@ public class DockerBuilder
         p.StartInfo.UseShellExecute = false;
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.FileName = "rundockerfile.sh";
+        p.StartInfo.Arguments = $"{working_directory} runtime-session";
         p.Start();
-        // Do not wait for the child process to exit before
-        // reading to the end of its redirected stream.
-        // p.WaitForExit();
+
+        // returns false if the program has not finished in n seconds
+        Console.WriteLine(p.WaitForExit(1000));
+
         // Read the output stream first and then wait.
         string output = p.StandardOutput.ReadToEnd();
         System.Console.WriteLine(output);
-        System.Console.WriteLine(p.WaitForExit(10));
+
+        // TODO: exit na 10 seconden
+        p.WaitForExit();
         return output;
     }
 }

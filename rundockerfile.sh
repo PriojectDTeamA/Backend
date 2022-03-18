@@ -1,3 +1,5 @@
 #!/bin/bash
 
-docker run hello-world
+cd $1
+docker build -t "session" . 
+docker run "session"
