@@ -68,8 +68,6 @@ public class DockerBuilder
         string output = p.StandardOutput.ReadToEnd();
         System.Console.WriteLine(output);
 
-        p.WaitForExit();
-
         // cleaning up the output, currently using a manual print statement in the template file.
         try
         {
