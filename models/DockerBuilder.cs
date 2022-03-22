@@ -6,22 +6,27 @@ public class DockerBuilder
     public static String working_directory = "./sessions/" + new Random().Next().ToString() + "/";
 
     public static string createDockerFile()
+    // currently only supported for python
     {
-        string filename = "main.py";
-        string[] filelines = { "#!/usr/bin/env python3", "", "print(\"hello world\")" };
-        string[] lines = { "FROM python:latest", $"COPY {filename} /", $"CMD [ \"python\", \"./{filename}\" ]" };
-        if (!Directory.Exists(working_directory))
-        {
-            Directory.CreateDirectory(working_directory);
-        }
-
+        /// uncomment to create template file on demand. 
+        // string[] filelines = { "#!/usr/bin/env python3", "", "print(\"hello world\")" };
         // using (StreamWriter codeFile = new StreamWriter(Path.Combine(working_directory, filename)))
         // {
         //     foreach (string line in filelines)
         //         codeFile.WriteLine(line);
         // }
 
-        File.Copy($"templates/{filename}", $"{working_directory}/{filename}");
+        string filename = "main.py";
+        string[] lines = { "FROM python:latest", $"COPY {filename} /", $"CMD [ \"python\", \"./{filename}\" ]" };
+
+        // create a new directory for the current session
+        if (!Directory.Exists(working_directory))
+        {
+            Directory.CreateDirectory(working_directory);
+        }
+
+        // copy the template file to our working directory
+        File.Copy($"templates/{filename}", $"{working_directory}/{filename}", true);
 
         // Write the string array to a new file named "WriteLines.txt".
         try
@@ -50,14 +55,31 @@ public class DockerBuilder
         p.Start();
 
         // returns false if the program has not finished in n seconds
-        Console.WriteLine(p.WaitForExit(10000));
+        bool checkexit = p.WaitForExit(10000);
+        // checks if the program is still running after n seconds and forcefully terminates it if it is still running.
+        if (!checkexit)
+        {
+            System.Console.WriteLine("Program terminating early!");
+            p.Kill(true);
+            return "No result, program took to long to run..";
+        }
 
         // Read the output stream first and then wait.
         string output = p.StandardOutput.ReadToEnd();
         System.Console.WriteLine(output);
 
-        // TODO: exit na 10 seconden
         p.WaitForExit();
+
+        // cleaning up the output, currently using a manual print statement in the template file.
+        try
+        {
+            String cleanedOutput = output.Split("Printing output:", 2)[1];
+            return cleanedOutput;
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine(e + "\nThere looks to be a problem splitting the output. Check if docker is behaving correctly");
+        }
         return output;
     }
 }
