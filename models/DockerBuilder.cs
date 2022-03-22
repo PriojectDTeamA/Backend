@@ -50,7 +50,7 @@ public class DockerBuilder
         p.Start();
 
         // returns false if the program has not finished in n seconds
-        Console.WriteLine(p.WaitForExit(1000));
+        Console.WriteLine(p.WaitForExit(10000));
 
         // Read the output stream first and then wait.
         string output = p.StandardOutput.ReadToEnd();

@@ -456,3 +456,4 @@ $RECYCLE.BIN/
 ## custom
 bin/Debug
 sessions/
+bin/Release
