@@ -21,7 +21,7 @@ public class DockerBuilder
         //         codeFile.WriteLine(line);
         // }
 
-        File.Move(filename, $"{working_directory}/{filename}");
+        File.Copy($"templates/{filename}", $"{working_directory}/{filename}");
 
         // Write the string array to a new file named "WriteLines.txt".
         try
@@ -45,7 +45,7 @@ public class DockerBuilder
         // Redirect the output stream of the child process.
         p.StartInfo.UseShellExecute = false;
         p.StartInfo.RedirectStandardOutput = true;
-        p.StartInfo.FileName = "rundockerfile.sh";
+        p.StartInfo.FileName = "templates/rundockerfile.sh";
         p.StartInfo.Arguments = $"{working_directory} runtime-session";
         p.Start();
 
