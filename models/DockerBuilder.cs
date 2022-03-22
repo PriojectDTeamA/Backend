@@ -61,7 +61,7 @@ public class DockerBuilder
         {
             System.Console.WriteLine("Program terminating early!");
             p.Kill(true);
-            return "No result, program took to long to run..";
+            return "No result, program took to long to run...";
         }
 
         // Read the output stream first and then wait.
