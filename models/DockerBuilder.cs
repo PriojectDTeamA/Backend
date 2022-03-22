@@ -8,6 +8,12 @@ public class DockerBuilder
     public static string createDockerFile()
     // currently only supported for python
     {
+        // create a new directory for the current session
+        if (!Directory.Exists(working_directory))
+        {
+            Directory.CreateDirectory(working_directory);
+        }
+
         /// uncomment to create template file on demand. 
         // string[] filelines = { "#!/usr/bin/env python3", "", "print(\"hello world\")" };
         // using (StreamWriter codeFile = new StreamWriter(Path.Combine(working_directory, filename)))
@@ -19,16 +25,10 @@ public class DockerBuilder
         string filename = "main.py";
         string[] lines = { "FROM python:latest", $"COPY {filename} /", $"CMD [ \"python\", \"./{filename}\" ]" };
 
-        // create a new directory for the current session
-        if (!Directory.Exists(working_directory))
-        {
-            Directory.CreateDirectory(working_directory);
-        }
-
         // copy the template file to our working directory
         File.Copy($"templates/{filename}", $"{working_directory}/{filename}", true);
 
-        // Write the string array to a new file named "WriteLines.txt".
+        // Write the string array to a new file named "Dockerfile".
         try
         {
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(working_directory, $"Dockerfile")))
