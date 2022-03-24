@@ -6,7 +6,7 @@ public class DockerBuilder
     private string working_directory;
     private Language language;
     private string? filename;
-    private string[]? dockerLines;
+    private string[] dockerLines;
 
     public DockerBuilder(Language language, string working_directory)
     {
@@ -24,6 +24,8 @@ public class DockerBuilder
                 "FROM mcr.microsoft.com/dotnet/aspnet:6.0", "WORKDIR /app", "COPY --from=build-env /app/out .", "ENTRYPOINT [\"dotnet\", \"dotnet.dll\"]" };
                 break;
             default:
+                this.filename = "";
+                this.dockerLines = new string[] { "" };
                 throw new FileLoadException("Error creating new files", nameof(language));
         }
     }
