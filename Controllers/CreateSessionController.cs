@@ -10,7 +10,7 @@ public class CreateSessionController : ControllerBase
     public JsonResult Get()
     {
         System.Console.WriteLine();
-        DockerSession session = new DockerSession(Language.dotnet, "Testsessie");
+        DockerSession session = new DockerSession(Language.python, new Random().Next().ToString());
         session.build();
         string output = session.run();
         return new JsonResult(output);
