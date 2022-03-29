@@ -85,16 +85,6 @@ public class PythonBuilder : DockerBuilder
     {
         File.Copy($"templates/{filename}", $"{dir}/{filename}");
     }
-
-    // public override string createDockerFile(string dir)
-    // {
-    //     return base.createDockerFile(dir);
-    // }
-
-    // public override string runDockerFile(string dir)
-    // {
-    //     return base.runDockerFile(dir);
-    // }
 }
 
 public class DotnetBuilder : DockerBuilder
@@ -127,14 +117,4 @@ public class DotnetBuilder : DockerBuilder
             System.IO.File.Copy(s, destFile, true);
         }
     }
-
-    // public override string createDockerFile(string dir)
-    // {
-    //     return base.createDockerFile(dir);
-    // }
-
-    // public override string runDockerFile(string dir)
-    // {
-    //     return base.runDockerFile(dir);
-    // }
 }
