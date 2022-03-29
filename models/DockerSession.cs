@@ -7,15 +7,6 @@ public class DockerSession
     readonly string workingDirectory;
     private DockerBuilder builder;
 
-    // public DockerSession(Language language, string sessionName)
-    // {
-    //     this.language = language;
-    //     this.sessionName = sessionName;
-    //     this.workingDirectory = "./sessions/" + sessionName + "/";
-    //     this.builder = new DockerBuilder(language, workingDirectory);
-    //     this.createSessionDirectory();
-    // }
-
     public DockerSession(string sessionName, DockerBuilder builder)
     {
         this.workingDirectory = "./sessions/" + sessionName + "/";
@@ -48,7 +39,7 @@ public class DockerSession
         if (firstRun())
         {
             Directory.CreateDirectory(workingDirectory);
-            builder.addTemplateFiles();
+            builder.addTemplateFiles(workingDirectory);
         }
     }
 }
@@ -58,11 +49,6 @@ public class PythonSession : DockerSession
     public PythonSession(string sessionName) : base(sessionName, new PythonBuilder(sessionName))
     {
 
-    }
-
-    public override void build()
-    {
-        base.build();
     }
 }
 

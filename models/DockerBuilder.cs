@@ -3,7 +3,6 @@ namespace Backend;
 
 public class DockerBuilder
 {
-    // private string working_directory;
     private string[] dockerLines;
 
     public DockerBuilder(string[] dockerLines)
@@ -66,7 +65,7 @@ public class DockerBuilder
         return output;
     }
 
-    public virtual void addTemplateFiles()
+    public virtual void addTemplateFiles(string dir)
     {
         return;
     }
@@ -76,43 +75,42 @@ public class PythonBuilder : DockerBuilder
 {
     string filename = "main.py";
     string[] dockerLines = { "FROM python:latest", $"COPY main.py /", $"CMD [ \"python\", \"./main.py\" ]" };
-    string working_directory;
+    // string working_directory;
     public PythonBuilder(string sessionName) : base(new string[] { "FROM python:latest", $"COPY main.py /", $"CMD [ \"python\", \"./main.py\" ]" })
     {
-        this.working_directory = "./sessions/" + sessionName + "/";
+        // this.working_directory = "./sessions/" + sessionName + "/";
     }
 
-    public override void addTemplateFiles()
+    public override void addTemplateFiles(string dir)
     {
-        File.Copy($"templates/{filename}", $"{working_directory}/{filename}");
+        File.Copy($"templates/{filename}", $"{dir}/{filename}");
     }
 
-    public string createDockerFile()
+    public override string createDockerFile(string dir)
     {
-        return base.createDockerFile(working_directory);
+        return base.createDockerFile(dir);
     }
 
-    public string runDockerFile()
+    public override string runDockerFile(string dir)
     {
-        return base.runDockerFile(working_directory);
+        return base.runDockerFile(dir);
     }
 }
 
 public class DotnetBuilder : DockerBuilder
 {
-    string filename = "";
     string[] dockerLines = { };
-    string working_directory;
+    // string working_directory;
     public DotnetBuilder(string sessionName) : base(new string[] { "FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env", "WORKDIR /app", $"COPY . ./", "RUN dotnet restore", "RUN dotnet publish -c Release -o out",
                 "FROM mcr.microsoft.com/dotnet/aspnet:6.0", "WORKDIR /app", "COPY --from=build-env /app/out .", "ENTRYPOINT [\"dotnet\", \"dotnet.dll\"]" })
     {
-        this.working_directory = "./sessions/" + sessionName + "/";
+        // this.working_directory = "./sessions/" + sessionName + "/";
     }
 
-    public override void addTemplateFiles()
+    public override void addTemplateFiles(string dir)
     {
         string sourcepath = "templates/dotnet";
-        string targetpath = $"{working_directory}";
+        string targetpath = $"{dir}";
         string[] files = System.IO.Directory.GetFiles(sourcepath);
 
         // Copy the files and overwrite destination files if they already exist.
@@ -130,13 +128,13 @@ public class DotnetBuilder : DockerBuilder
         }
     }
 
-    public string createDockerFile()
+    public override string createDockerFile(string dir)
     {
-        return base.createDockerFile(working_directory);
+        return base.createDockerFile(dir);
     }
 
-    public string runDockerFile()
+    public override string runDockerFile(string dir)
     {
-        return base.runDockerFile(working_directory);
+        return base.runDockerFile(dir);
     }
 }
