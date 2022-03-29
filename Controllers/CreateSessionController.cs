@@ -4,15 +4,13 @@ namespace Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CreateSessionController : ControllerBase
+public class CreatePythonSessionController : ControllerBase
 {
-    [HttpGet(Name = "CreateSession")]
+    [HttpGet(Name = "CreatePythonSession")]
     public JsonResult Get()
     {
-        System.Console.WriteLine();
-        DockerSession session = new DockerSession(Language.python, new Random().Next().ToString());
-        session.build();
-        string output = session.run();
-        return new JsonResult(output);
+        var session2 = new DotnetSession("sessietje4");
+        session2.build();
+        return new JsonResult(session2.run());
     }
 }
