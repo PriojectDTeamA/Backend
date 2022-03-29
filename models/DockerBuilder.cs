@@ -76,9 +76,11 @@ public class PythonBuilder : DockerBuilder
     string filename = "main.py";
     string[] dockerLines = { "FROM python:latest", $"COPY main.py /", $"CMD [ \"python\", \"./main.py\" ]" };
     // string working_directory;
-    public PythonBuilder(string sessionName) : base(new string[] { "FROM python:latest", $"COPY main.py /", $"CMD [ \"python\", \"./main.py\" ]" })
+    public PythonBuilder(string sessionName) : base(new string[] {
+        "FROM python:latest",
+        $"COPY main.py /",
+        $"CMD [ \"python\", \"./main.py\" ]" })
     {
-        // this.working_directory = "./sessions/" + sessionName + "/";
     }
 
     public override void addTemplateFiles(string dir)
@@ -89,12 +91,17 @@ public class PythonBuilder : DockerBuilder
 
 public class DotnetBuilder : DockerBuilder
 {
-    string[] dockerLines = { };
-    // string working_directory;
-    public DotnetBuilder(string sessionName) : base(new string[] { "FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env", "WORKDIR /app", $"COPY . ./", "RUN dotnet restore", "RUN dotnet publish -c Release -o out",
-                "FROM mcr.microsoft.com/dotnet/aspnet:6.0", "WORKDIR /app", "COPY --from=build-env /app/out .", "ENTRYPOINT [\"dotnet\", \"dotnet.dll\"]" })
+    public DotnetBuilder(string sessionName) : base(new string[] {
+        "FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env",
+        "WORKDIR /app",
+        $"COPY . ./",
+        "RUN dotnet restore",
+        "RUN dotnet publish -c Release -o out",
+        "FROM mcr.microsoft.com/dotnet/aspnet:6.0",
+        "WORKDIR /app",
+        "COPY --from=build-env /app/out .",
+        "ENTRYPOINT [\"dotnet\", \"dotnet.dll\"]"})
     {
-        // this.working_directory = "./sessions/" + sessionName + "/";
     }
 
     public override void addTemplateFiles(string dir)
