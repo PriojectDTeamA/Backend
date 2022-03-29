@@ -1,6 +1,6 @@
 namespace Backend;
 
-public class DockerSession
+public abstract class DockerSession
 {
     public Language language { get; set; }
     public string sessionName { get; set; }

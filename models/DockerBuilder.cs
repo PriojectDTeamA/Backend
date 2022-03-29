@@ -1,7 +1,7 @@
 using System.Diagnostics;
 namespace Backend;
 
-public class DockerBuilder
+public abstract class DockerBuilder
 {
     private string[] dockerLines;
 
