@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <Compile Remove="sessions\**" />
-    <Content Include="sessions\**" />
+    <!-- <Content Include="sessions\**" /> -->
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 namespace Backend;
 
 public abstract class DockerBuilder
@@ -39,7 +40,7 @@ public abstract class DockerBuilder
         p.Start();
 
         // returns false if the program has not finished in n seconds
-        bool checkexit = p.WaitForExit(60000);
+        bool checkexit = p.WaitForExit(600000);
         // checks if the program is still running after n seconds and forcefully terminates it if it is still running.
         if (!checkexit)
         {
@@ -68,6 +69,31 @@ public abstract class DockerBuilder
     public virtual void addTemplateFiles(string dir)
     {
         return;
+    }
+    public void CopyDir(string sourceFolder, string destFolder)
+    {
+        if (!Directory.Exists(destFolder))
+            Directory.CreateDirectory(destFolder);
+
+        // Get Files & Copy
+        string[] files = Directory.GetFiles(sourceFolder);
+        foreach (string file in files)
+        {
+            string name = Path.GetFileName(file);
+
+            // ADD Unique File Name Check to Below!!!!
+            string dest = Path.Combine(destFolder, name);
+            File.Copy(file, dest);
+        }
+
+        // Get dirs recursively and copy files
+        string[] folders = Directory.GetDirectories(sourceFolder);
+        foreach (string folder in folders)
+        {
+            string name = Path.GetFileName(folder);
+            string dest = Path.Combine(destFolder, name);
+            CopyDir(folder, dest);
+        }
     }
 }
 
@@ -125,3 +151,26 @@ public class DotnetBuilder : DockerBuilder
         }
     }
 }
+
+public class JavascriptBuilder : DockerBuilder
+{
+    public JavascriptBuilder(string sessionName) : base(new string[] {
+        "FROM node:16",
+        "COPY package*.json ./",
+        "RUN npm install",
+        "COPY . .",
+        "CMD [ \"node\", \".\" ]",
+    })
+    {
+
+    }
+
+    public override void addTemplateFiles(string dir)
+    {
+        string sourcepath = "templates/javascript";
+        string targetpath = $"{dir}";
+        base.CopyDir(sourcepath, targetpath);
+    }
+}
+
+

@@ -59,3 +59,11 @@ public class DotnetSession : DockerSession
 
     }
 }
+
+public class JavascriptSession : DockerSession
+{
+    public JavascriptSession(string sessionName) : base(sessionName, new JavascriptBuilder(sessionName))
+    {
+
+    }
+}
