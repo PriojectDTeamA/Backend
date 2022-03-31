@@ -85,7 +85,7 @@ public class PythonBuilder : DockerBuilder
 
     public override void addTemplateFiles(string dir)
     {
-        File.Copy($"templates/{filename}", $"{dir}/{filename}");
+        File.Copy($"templates/python/{filename}", $"{dir}/{filename}");
     }
 }
 
