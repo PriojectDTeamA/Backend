@@ -56,7 +56,7 @@ public abstract class DockerBuilder
         // cleaning up the output, currently using a manual print statement in the template file.
         try
         {
-            String cleanedOutput = output.Split("Printing output:", 2)[1];
+            String cleanedOutput = output.Split("starting output here --", 2)[1];
             return cleanedOutput;
         }
         catch (Exception e)
