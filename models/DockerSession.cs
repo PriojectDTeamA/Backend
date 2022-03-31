@@ -42,6 +42,12 @@ public abstract class DockerSession
             builder.addTemplateFiles(workingDirectory);
         }
     }
+
+    private string getFileInfo()
+    {
+
+        return "";
+    }
 }
 
 public class PythonSession : DockerSession

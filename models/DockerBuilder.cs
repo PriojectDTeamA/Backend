@@ -31,12 +31,13 @@ public abstract class DockerBuilder
     }
     public virtual string runDockerFile(string dir)
     {
+        string dockerSessionName = new Random().Next().ToString();
         Process p = new Process();
         // Redirect the output stream of the child process.
         p.StartInfo.UseShellExecute = false;
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.FileName = "templates/rundockerfile.sh";
-        p.StartInfo.Arguments = $"{dir} runtime-session";
+        p.StartInfo.Arguments = $"{dir} {dockerSessionName}";
         p.Start();
 
         // returns false if the program has not finished in n seconds
@@ -56,7 +57,8 @@ public abstract class DockerBuilder
         // cleaning up the output, currently using a manual print statement in the template file.
         try
         {
-            String cleanedOutput = output.Split("starting output here --", 2)[1];
+            String cleanedOutput = output.Split("--start of output--\n", 2)[1];
+            cleanedOutput = cleanedOutput.Split("\n--end of output--", 2)[0];
             return cleanedOutput;
         }
         catch (Exception e)
@@ -70,6 +72,7 @@ public abstract class DockerBuilder
     {
         return;
     }
+
     public void CopyDir(string sourceFolder, string destFolder)
     {
         if (!Directory.Exists(destFolder))
