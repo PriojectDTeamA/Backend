@@ -4,10 +4,10 @@ namespace Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CreateDotnetSessionController : ControllerBase
+public class CreateSessionController : ControllerBase
 {
-    [HttpGet(Name = "CreateDotnetSession")]
-    public JsonResult Get()
+    [HttpGet("{lang}", Name = "CreateSession")]
+    public JsonResult Get(string lang)
     {
 
         // just for debug purposes
@@ -21,6 +21,10 @@ public class CreateDotnetSessionController : ControllerBase
         // ik wil gewoon een dockerbuilder/reguliere dotnet session .run() method kunnen aanroepen
 
         var session2 = new DotnetSession(name);
-        return new JsonResult(session2.run());
+        return new JsonResult(session2.run() + lang);
+    }
+    public JsonResult Get()
+    {
+        return new JsonResult("No language provided.");
     }
 }

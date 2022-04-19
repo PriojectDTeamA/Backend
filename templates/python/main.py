@@ -1,3 +1,6 @@
 #!/usr/bin/env python3
 
-print("Hello World");
+import os
+cwd = os.getcwd()
+print(cwd)
+print("Hello World (from python!)");

@@ -12,7 +12,10 @@ public abstract class DockerSession
         this.workingDirectory = "./sessions/" + sessionName + "/";
         this.sessionName = sessionName;
         this.builder = builder;
-        this.createSessionDirectory();
+        if (firstRun())
+        {
+            this.createSessionDirectory();
+        }
     }
 
     public virtual void build()
@@ -36,11 +39,9 @@ public abstract class DockerSession
 
     private void createSessionDirectory()
     {
-        if (firstRun())
-        {
-            Directory.CreateDirectory(workingDirectory);
-            builder.addTemplateFiles(workingDirectory);
-        }
+
+        Directory.CreateDirectory(workingDirectory);
+        builder.addTemplateFiles(workingDirectory);
     }
 
     private string getFileInfo()
