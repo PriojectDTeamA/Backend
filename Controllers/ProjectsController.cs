@@ -29,13 +29,13 @@ public class ProjectsController : ControllerBase
     [HttpGet("{ProjectID}")]
     public JsonResult getSingleProject(int ProjectID)
     {
-        string query = @"SELECT * FROM Projects WHERE ID=@ProjectID";
+        string query = @"SELECT * FROM Users";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
-                myCommand.Parameters.AddWithValue("@ProjectID", ProjectID);
+                // myCommand.Parameters.AddWithValue("@ProjectID", ProjectID);
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);
 
