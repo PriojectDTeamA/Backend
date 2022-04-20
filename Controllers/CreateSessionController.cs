@@ -6,24 +6,22 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class CreateSessionController : ControllerBase
 {
-    [HttpGet("{lang}", Name = "CreateSession")]
-    public JsonResult Get(string lang)
+    [HttpPost(Name = "CreateSession")]
+    public JsonResult Post([FromBody] Session s)
     {
+        // creates a new session;
+        // builds the working directory, assigns a project ID, adds the project to the Database
+        // returns the project ID and the language.
+        string language = s.language;
+        string project_name = s.project_name;
+        int project_owner_id = s.project_owner_id;
+        int project_id = 1;
+        var return_value = new { language, project_name, project_owner_id, project_id };
 
-        // just for debug purposes
-        string name = new Random().Next().ToString();
-
-        var session1 = new DotnetSession(name);
-        session1.build();
-
-        // hier kan een splitsing komen tussen de 'new project' en de 'run' knop. 
-        // de 'run' command moet nog geimplementeerd worden om 'los' te doen. 
-        // ik wil gewoon een dockerbuilder/reguliere dotnet session .run() method kunnen aanroepen
-
-        var session2 = new DotnetSession(name);
-        return new JsonResult(session2.run() + lang);
+        // TODO; create working directory, add dockerfiles etc.
+        return new JsonResult(return_value);
     }
-    public JsonResult Get()
+    public JsonResult Post()
     {
         return new JsonResult("No language provided.");
     }
