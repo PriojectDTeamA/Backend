@@ -20,12 +20,12 @@ public class UsersController : ControllerBase
     {
         _configuration = configuration;
         // create connection
-        sqlDataSource = _configuration.GetConnectionString("DbCon");
+        sqlDataSource = _configuration.GetConnectionString("DbCon");  // DbCon moet nog geadd worden in appsettings onder connectionstring
         table = new DataTable();
     }
 
     // TODO: een GET request voor 1 bepaalde gebruiker door middel van ID
-    // GET User/UserID
+    // GET Users/UserID
     [HttpGet("{UserID}")]
     public JsonResult getSingleUser(int UserID)
     {
