@@ -6,11 +6,15 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class RunSessionController : ControllerBase
 {
-    [HttpGet("/{ProjectID}")]
-    public JsonResult Get(string id)
+    [HttpPost(Name = "RunSession")]
+    public JsonResult Post([FromBody] ActiveSession s)
     {
+        int project_id = s.project_id;
+        string code = s.code;
+        string output = "Hello World!";
+        var result = new { output };
         // TODO: Run de code op basis van het project ID
 
-        return new JsonResult("Hello World!");
+        return new JsonResult(result);
     }
 }
