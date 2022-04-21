@@ -44,7 +44,7 @@ public class UsersController : ControllerBase
                 mycon.Close();
             }
         }
-        return new JsonResult(new ResponseData { Status = "Succes", Data = table });
+        return new JsonResult(new ResponseData { Status = "Success", Data = table });
     }
 }
 

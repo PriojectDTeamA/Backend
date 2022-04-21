@@ -47,7 +47,7 @@ public class ProjectsController : ControllerBase
         }
         string JSONString = string.Empty;
         JSONString = JsonConvert.SerializeObject(table);
-        return new JsonResult(new Response { Status = "Succes", Message = JSONString });
+        return new JsonResult(new Response { Status = "Success", Message = JSONString });
     }
 
     // TODO: een GET request voor alle projecten van 1 bepaalde gebruiker door middel van de ID van die gebruiker

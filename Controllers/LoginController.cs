@@ -50,6 +50,6 @@ public class LoginController : ControllerBase
         }
         string JSONString = string.Empty;
         JSONString = JsonConvert.SerializeObject(table);
-        return new JsonResult(new Response { Status = "Succes", Message = JSONString });
+        return new JsonResult(new Response { Status = "Success", Message = JSONString });
     }
 }

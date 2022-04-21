@@ -15,6 +15,6 @@ public class RunSessionController : ControllerBase
         var result = new { output };
         // TODO: Run de code op basis van het project ID
 
-        return new JsonResult(new Response { Status = "Succes", Message = output });
+        return new JsonResult(new Response { Status = "Success", Message = output });
     }
 }

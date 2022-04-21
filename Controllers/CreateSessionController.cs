@@ -20,7 +20,7 @@ public class CreateSessionController : ControllerBase
         var return_value = new { language, project_name, project_owner_id, project_id };
 
         // TODO; create working directory, add dockerfiles etc.
-        return new JsonResult(new Response { Status = "Succes", Message = return_value.ToString() });
+        return new JsonResult(new Response { Status = "Success", Message = return_value.ToString() });
     }
     public JsonResult Post()
     {

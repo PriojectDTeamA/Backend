@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using Backend.Models;
 namespace Backend.Controllers;
 
 [ApiController]
@@ -13,6 +13,6 @@ public class JoinSessionController : ControllerBase
         string codestring = "print(\"Hello World!\")";
         var output = new { codestring, };
 
-        return new JsonResult(output);
+        return new JsonResult(new Response { Status = "Success", Message = codestring });
     }
 }
