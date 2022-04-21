@@ -50,6 +50,13 @@ public class LoginController : ControllerBase
         }
         string JSONString = string.Empty;
         JSONString = JsonConvert.SerializeObject(table);
-        return new JsonResult(new Response { Status = "Success", Message = JSONString });
+        if (JSONString != "[]")
+        {
+            return new JsonResult(new Response { Status = "Success", Message = JSONString });
+        }
+        else
+        {
+            return new JsonResult(new Response { Status = "Failed", Message = "Login incorrect" });
+        }
     }
 }
