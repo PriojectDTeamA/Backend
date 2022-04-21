@@ -53,27 +53,26 @@ public class ProjectsController : ControllerBase
     // TODO: een GET request voor alle projecten van 1 bepaalde gebruiker door middel van de ID van die gebruiker
     // Misschien dat dit beter bij ProjectController past idk. ff bespreken waar deze request t beste past
     // GET projects/UserID
-    // [HttpGet("UserID")]
-    // public String getAllProjectsOfUser(int UserID)
-    // {
-    //     string query = @"SELECT * FROM Projects WHERE Owner=@UserID";
-    //     using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
-    //     {
-    //         mycon.Open();
-    //         using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-    //         {
-    //             myCommand.Parameters.AddWithValue("@UserID", UserID);
-    //             myReader = myCommand.ExecuteReader();
-    //             table.Load(myReader);
+    [HttpGet("Project/{UserID}")]
+    public JsonResult getAllProjectsOfUser(int UserID)
+    {
+        string query = @"SELECT * FROM Projects WHERE Owner=@UserID";
+        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+        {
+            mycon.Open();
+            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+            {
+                myCommand.Parameters.AddWithValue("@UserID", UserID);
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader);
 
-    //             myReader.Close();
-    //             mycon.Close();
-    //         }
-    //     }
-    //     string JSONString = string.Empty;
-    //     JSONString = JsonConvert.SerializeObject(table);
-    //     return JSONString;
-    // }
+                myReader.Close();
+                mycon.Close();
+            }
+        }
+        return new JsonResult(new ResponseData { Status = "Success", Data = table });
+
+    }
 }
 
 

@@ -1,9 +1,31 @@
 using SignalRChat.Hubs;
 using Backend;
+// using Microsoft.AspNetCore.Http.Json;
+using Newtonsoft.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//JSON Serializer
+// builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+// options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+//     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
+//     = new DefaultContractResolver());
+
+// // Set the JSON serializer options
+// builder.Services.Configure<JsonOptions>(options =>
+// {
+//     options.SerializerOptions.PropertyNameCaseInsensitive = false;
+//     options.SerializerOptions.PropertyNamingPolicy = null;
+//     options.SerializerOptions.WriteIndented = true;
+// });
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+    .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
+    = new DefaultContractResolver());
+// builder.Services.AddControllers()
+//     .AddNewtonsoftJson();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

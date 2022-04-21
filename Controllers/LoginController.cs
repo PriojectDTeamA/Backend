@@ -31,7 +31,6 @@ public class LoginController : ControllerBase
 
         string username = l.username;
         string password = l.password;
-        string userID = "1";
         var result = new { userID };
 
         string query = @"SELECT * FROM Users WHERE username=@username AND hashedPW=@password";
@@ -51,9 +50,9 @@ public class LoginController : ControllerBase
         }
         string JSONString = string.Empty;
         JSONString = JsonConvert.SerializeObject(table);
-        if (JSONString != "[]")
+        if (table.Rows.Count != 0)
         {
-            return new JsonResult(new Response { Status = "Success", Message = JSONString });
+            return new JsonResult(new ResponseData { Status = "Success", Data = table });
         }
         else
         {
