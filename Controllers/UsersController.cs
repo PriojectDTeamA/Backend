@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.Linq;
 using MySql.Data.MySqlClient;
+using Backend.Models;
 
 namespace Backend.Controllers;
 
@@ -43,7 +44,7 @@ public class UsersController : ControllerBase
                 mycon.Close();
             }
         }
-        return new JsonResult(table);
+        return new JsonResult(new ResponseData { Status = "Succes", Data = table });
     }
 }
 

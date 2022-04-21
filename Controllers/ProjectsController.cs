@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using Backend.Models;
 
 namespace Backend.Controllers;
 
@@ -28,7 +29,7 @@ public class ProjectsController : ControllerBase
     // TODO: een GET request voor 1 project met een bepaalde id
     // GET Projects/ProjectID
     [HttpGet("{ProjectID}")]
-    public string getSingleProject(int ProjectID)
+    public JsonResult getSingleProject(int ProjectID)
     {
         string query = @"SELECT * FROM Projects WHERE ID=@ProjectID";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
@@ -46,33 +47,33 @@ public class ProjectsController : ControllerBase
         }
         string JSONString = string.Empty;
         JSONString = JsonConvert.SerializeObject(table);
-        return JSONString;
+        return new JsonResult(new Response { Status = "Succes", Message = JSONString });
     }
 
     // TODO: een GET request voor alle projecten van 1 bepaalde gebruiker door middel van de ID van die gebruiker
     // Misschien dat dit beter bij ProjectController past idk. ff bespreken waar deze request t beste past
     // GET projects/UserID
-    [HttpGet("UserID")]
-    public String getAllProjectsOfUser(int UserID)
-    {
-        string query = @"SELECT * FROM Projects WHERE Owner=@UserID";
-        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
-        {
-            mycon.Open();
-            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-            {
-                myCommand.Parameters.AddWithValue("@UserID", UserID);
-                myReader = myCommand.ExecuteReader();
-                table.Load(myReader);
+    // [HttpGet("UserID")]
+    // public String getAllProjectsOfUser(int UserID)
+    // {
+    //     string query = @"SELECT * FROM Projects WHERE Owner=@UserID";
+    //     using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+    //     {
+    //         mycon.Open();
+    //         using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+    //         {
+    //             myCommand.Parameters.AddWithValue("@UserID", UserID);
+    //             myReader = myCommand.ExecuteReader();
+    //             table.Load(myReader);
 
-                myReader.Close();
-                mycon.Close();
-            }
-        }
-        string JSONString = string.Empty;
-        JSONString = JsonConvert.SerializeObject(table);
-        return JSONString;
-    }
+    //             myReader.Close();
+    //             mycon.Close();
+    //         }
+    //     }
+    //     string JSONString = string.Empty;
+    //     JSONString = JsonConvert.SerializeObject(table);
+    //     return JSONString;
+    // }
 }
 
 

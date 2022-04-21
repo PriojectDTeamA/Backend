@@ -6,7 +6,7 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class JoinSessionController : ControllerBase
 {
-    [HttpGet("/{ProjectID}")]
+    [HttpGet("{ProjectID}")]
     public JsonResult Get(int project_id)
     {
         // TODO: Get de code op basis van het project ID

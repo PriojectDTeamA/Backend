@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using Backend.Models;
 namespace Backend.Controllers;
 
 [ApiController]
@@ -15,6 +15,6 @@ public class LoginController : ControllerBase
         var result = new { userID };
         // TODO: Run de code op basis van het project ID
 
-        return new JsonResult(result);
+        return new JsonResult(new Response { Status = "Succes", Message = userID });
     }
 }
