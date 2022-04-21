@@ -34,13 +34,14 @@ public class LoginController : ControllerBase
         string userID = "1";
         var result = new { userID };
 
-        string query = @"SELECT * FROM Users WHERE username=@username";
+        string query = @"SELECT * FROM Users WHERE username=@username AND hashedPW=@password";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
                 myCommand.Parameters.AddWithValue("@username", username);
+                myCommand.Parameters.AddWithValue("@password", password);
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);
 
