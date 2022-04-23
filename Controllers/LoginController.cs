@@ -31,7 +31,7 @@ public class LoginController : ControllerBase
 
         string username = l.username;
         string password = l.password;
-        var result = new { userID };
+        // var result = new { userID };
 
         string query = @"SELECT * FROM Users WHERE username=@username AND hashedPW=@password";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
