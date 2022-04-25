@@ -11,7 +11,8 @@ public class RunSessionController : ControllerBase
     {
         int project_id = s.project_id;
         string code = s.code;
-        Console.WriteLine(code);
+        string language = s.language;
+        Console.WriteLine($"code: {code}\nprojectID: {project_id}\nlanguage: {language}");
         string output = "Hello World! (default return message. Method not yet implemented)";
         var result = new { output };
         // TODO: Run de code op basis van het project ID
