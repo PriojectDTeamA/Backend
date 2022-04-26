@@ -73,6 +73,11 @@ public abstract class DockerBuilder
         return;
     }
 
+    public virtual void addNewCode(string dir, string code)
+    {
+        return;
+    }
+
     public void CopyDir(string sourceFolder, string destFolder)
     {
         if (!Directory.Exists(destFolder))
@@ -116,6 +121,11 @@ public class PythonBuilder : DockerBuilder
     {
         File.Copy($"templates/python/{filename}", $"{dir}/{filename}");
     }
+
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/{filename}", code);
+    }
 }
 
 public class DotnetBuilder : DockerBuilder
@@ -153,6 +163,10 @@ public class DotnetBuilder : DockerBuilder
             System.IO.File.Copy(s, destFile, true);
         }
     }
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/program.cs", code);
+    }
 }
 
 public class JavascriptBuilder : DockerBuilder
@@ -173,6 +187,11 @@ public class JavascriptBuilder : DockerBuilder
         string sourcepath = "templates/javascript";
         string targetpath = $"{dir}";
         base.CopyDir(sourcepath, targetpath);
+    }
+
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/bin/index.js", code);
     }
 }
 
