@@ -32,26 +32,36 @@ public abstract class DockerBuilder
     public virtual string runDockerFile(string dir)
     {
         string dockerSessionName = new Random().Next().ToString();
+        //string dockerSessionName = "test2";
         Process p = new Process();
         // Redirect the output stream of the child process.
         p.StartInfo.UseShellExecute = false;
         p.StartInfo.RedirectStandardOutput = true;
-        p.StartInfo.FileName = "templates/rundockerfile.sh";
+        p.StartInfo.FileName = "templates/createdockerfile.sh";
         p.StartInfo.Arguments = $"{dir} {dockerSessionName}";
         p.Start();
+        p.WaitForExit();
+
+        Process r = new Process();
+        // Redirect the output stream of the child process.
+        r.StartInfo.UseShellExecute = false;
+        r.StartInfo.RedirectStandardOutput = true;
+        r.StartInfo.FileName = "templates/rundockerfile.sh";
+        r.StartInfo.Arguments = $"{dir} {dockerSessionName}";
+        r.Start();
 
         // returns false if the program has not finished in n seconds
-        bool checkexit = p.WaitForExit(600000);
+        bool checkexit = r.WaitForExit(600000);
         // checks if the program is still running after n seconds and forcefully terminates it if it is still running.
         if (!checkexit)
         {
             System.Console.WriteLine("Program terminating early!");
-            p.Kill(true);
+            r.Kill(true);
             return "No result, program took to long to run...";
         }
 
         // Read the output stream first and then wait.
-        string output = p.StandardOutput.ReadToEnd();
+        string output = r.StandardOutput.ReadToEnd();
         System.Console.WriteLine(output);
 
         // cleaning up the output, currently using a manual print statement in the template file.

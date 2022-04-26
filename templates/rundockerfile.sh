@@ -1,8 +1,7 @@
 #!/bin/bash
 
 cd $1
-docker build -t $2 . 
 echo --start of output--
-docker run --rm $2
+docker run --rm $2 2>&1
 echo --end of output--
 docker rmi $2
