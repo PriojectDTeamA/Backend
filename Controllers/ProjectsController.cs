@@ -53,7 +53,7 @@ public class ProjectsController : ControllerBase
     // TODO: een GET request voor alle projecten van 1 bepaalde gebruiker door middel van de ID van die gebruiker
     // Misschien dat dit beter bij ProjectController past idk. ff bespreken waar deze request t beste past
     // GET projects/UserID
-    [HttpGet("Project/{UserID}")]
+    [HttpGet("Projects/{UserID}")]
     public JsonResult getAllProjectsOfUser(int UserID)
     {
         string query = @"SELECT * FROM Projects WHERE Owner=@UserID";
@@ -70,6 +70,7 @@ public class ProjectsController : ControllerBase
                 mycon.Close();
             }
         }
+        Console.WriteLine(table);
         return new JsonResult(new ResponseData { Status = "Success", Data = table });
 
     }
