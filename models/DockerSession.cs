@@ -49,6 +49,10 @@ public abstract class DockerSession
 
         return "";
     }
+    public void addNewCode(string code)
+    {
+        builder.addNewCode(workingDirectory, code);
+    }
 }
 
 public class PythonSession : DockerSession

@@ -32,26 +32,36 @@ public abstract class DockerBuilder
     public virtual string runDockerFile(string dir)
     {
         string dockerSessionName = new Random().Next().ToString();
+        //string dockerSessionName = "test2";
         Process p = new Process();
         // Redirect the output stream of the child process.
         p.StartInfo.UseShellExecute = false;
         p.StartInfo.RedirectStandardOutput = true;
-        p.StartInfo.FileName = "templates/rundockerfile.sh";
+        p.StartInfo.FileName = "templates/createdockerfile.sh";
         p.StartInfo.Arguments = $"{dir} {dockerSessionName}";
         p.Start();
+        p.WaitForExit();
+
+        Process r = new Process();
+        // Redirect the output stream of the child process.
+        r.StartInfo.UseShellExecute = false;
+        r.StartInfo.RedirectStandardOutput = true;
+        r.StartInfo.FileName = "templates/rundockerfile.sh";
+        r.StartInfo.Arguments = $"{dir} {dockerSessionName}";
+        r.Start();
 
         // returns false if the program has not finished in n seconds
-        bool checkexit = p.WaitForExit(600000);
+        bool checkexit = r.WaitForExit(600000);
         // checks if the program is still running after n seconds and forcefully terminates it if it is still running.
         if (!checkexit)
         {
             System.Console.WriteLine("Program terminating early!");
-            p.Kill(true);
+            r.Kill(true);
             return "No result, program took to long to run...";
         }
 
         // Read the output stream first and then wait.
-        string output = p.StandardOutput.ReadToEnd();
+        string output = r.StandardOutput.ReadToEnd();
         System.Console.WriteLine(output);
 
         // cleaning up the output, currently using a manual print statement in the template file.
@@ -69,6 +79,11 @@ public abstract class DockerBuilder
     }
 
     public virtual void addTemplateFiles(string dir)
+    {
+        return;
+    }
+
+    public virtual void addNewCode(string dir, string code)
     {
         return;
     }
@@ -116,6 +131,11 @@ public class PythonBuilder : DockerBuilder
     {
         File.Copy($"templates/python/{filename}", $"{dir}/{filename}");
     }
+
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/{filename}", code);
+    }
 }
 
 public class DotnetBuilder : DockerBuilder
@@ -153,6 +173,10 @@ public class DotnetBuilder : DockerBuilder
             System.IO.File.Copy(s, destFile, true);
         }
     }
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/program.cs", code);
+    }
 }
 
 public class JavascriptBuilder : DockerBuilder
@@ -173,6 +197,11 @@ public class JavascriptBuilder : DockerBuilder
         string sourcepath = "templates/javascript";
         string targetpath = $"{dir}";
         base.CopyDir(sourcepath, targetpath);
+    }
+
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/bin/index.js", code);
     }
 }
 
