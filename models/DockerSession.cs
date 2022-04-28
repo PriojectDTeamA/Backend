@@ -53,6 +53,10 @@ public abstract class DockerSession
     {
         builder.addNewCode(workingDirectory, code);
     }
+
+    public string getCode() {
+        return builder.getCode(workingDirectory);
+    }
 }
 
 public class PythonSession : DockerSession

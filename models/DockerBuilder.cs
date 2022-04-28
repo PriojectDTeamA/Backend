@@ -88,6 +88,11 @@ public abstract class DockerBuilder
         return;
     }
 
+    public virtual string getCode(string dir)
+    {
+        return "";
+    }
+
     public void CopyDir(string sourceFolder, string destFolder)
     {
         if (!Directory.Exists(destFolder))
@@ -136,6 +141,20 @@ public class PythonBuilder : DockerBuilder
     {
         File.WriteAllText($"{dir}/{filename}", code);
     }
+
+    public override string getCode(string dir)
+    {
+        if (!Directory.Exists(dir))
+        {
+            return "Error! No file found";
+        }
+        else
+        {
+            string output = "";
+            output = File.ReadAllText($"{dir}/{filename}");
+            return output;
+        }
+    }
 }
 
 public class DotnetBuilder : DockerBuilder
@@ -177,6 +196,20 @@ public class DotnetBuilder : DockerBuilder
     {
         File.WriteAllText($"{dir}/program.cs", code);
     }
+
+    public override string getCode(string dir)
+    {
+        if (!Directory.Exists(dir))
+        {
+            return "Error! No file found";
+        }
+        else
+        {
+            string output = "";
+            output = File.ReadAllText($"{dir}/program.cs");
+            return output;
+        }
+    }
 }
 
 public class JavascriptBuilder : DockerBuilder
@@ -202,6 +235,19 @@ public class JavascriptBuilder : DockerBuilder
     public override void addNewCode(string dir, string code)
     {
         File.WriteAllText($"{dir}/bin/index.js", code);
+    }
+    public override string getCode(string dir)
+    {
+        if (!Directory.Exists(dir))
+        {
+            return "Error! No file found";
+        }
+        else
+        {
+            string output = "";
+            output = File.ReadAllText($"{dir}/bin/index.js");
+            return output;
+        }
     }
 }
 

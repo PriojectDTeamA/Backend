@@ -11,6 +11,8 @@ public class JoinSessionController : ControllerBase
     {
         // TODO: Get de code op basis van het project ID
         string codestring = "print(\"Hello World!\")";
+
+
         var output = new { codestring, };
 
         return new JsonResult(new Response { Status = "Success", Message = codestring });

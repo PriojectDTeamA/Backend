@@ -1,5 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Backend.Models;
+using MySql.Data.MySqlClient;
+using System.Data;
+using Newtonsoft.Json;
+
+
+
 
 namespace Backend.Controllers;
 
@@ -7,6 +13,17 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class CreateSessionController : ControllerBase
 {
+    private readonly IConfiguration _configuration;
+    private MySqlDataReader myReader;
+    private DataTable table { get; set; }
+    private string sqlDataSource { get; set; }
+    public CreateSessionController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        // create connection
+        sqlDataSource = _configuration.GetConnectionString("DbCon"); // DbCon moet nog geadd worden in appsettings onder connectionstring
+        table = new DataTable();
+    }
     [HttpPost(Name = "CreateSession")]
     public JsonResult Post([FromBody] Session s)
     {
@@ -16,11 +33,58 @@ public class CreateSessionController : ControllerBase
         string language = s.language;
         string project_name = s.project_name;
         int project_owner_id = s.project_owner_id;
-        int project_id = 1;
-        var return_value = new { language, project_name, project_owner_id, project_id };
 
-        // TODO; create working directory, add dockerfiles etc.
-        return new JsonResult(new Response { Status = "Success", Message = return_value.ToString() });
+        // Adding the new project to the database and returning the newly created ID
+        string query = @"INSERT INTO Projects (name, owner, language) VALUES (@name, @owner, @language);
+            SELECT ID FROM Projects WHERE ID = @@identity";
+        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+        {
+            mycon.Open();
+            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+            {
+                myCommand.Parameters.AddWithValue("@name", project_name);
+                myCommand.Parameters.AddWithValue("@owner", project_owner_id);
+                myCommand.Parameters.AddWithValue("@language", language);
+
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader);
+
+                myReader.Close();
+                mycon.Close();
+            }
+        }
+
+        // temp
+        string JSONString = string.Empty;
+        JSONString = JsonConvert.SerializeObject(table);
+
+        // casting project_id to string create new session and directory
+        string project_id = table.Select()[0]["ID"].ToString();
+
+        // creating the session based on the language, creating working directory
+        string output = "";
+        switch (language)
+        {
+            case "python":
+                var ps = new PythonSession(project_id);
+                ps.build();
+                output = ps.getCode();
+                break;
+            case "dotnet":
+                var dns = new DotnetSession(project_id);
+                dns.build();
+                output = dns.getCode();
+                break;
+            case "javascript":
+                var jss = new JavascriptSession(project_id);
+                jss.build();
+                output = jss.getCode();
+                break;
+            default:
+                break;
+        }
+
+        return new JsonResult(new Response { Status = "Success", Message = JsonConvert.SerializeObject(output) });
     }
     public JsonResult Post()
     {
