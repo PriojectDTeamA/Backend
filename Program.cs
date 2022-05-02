@@ -55,6 +55,14 @@ app.UseCors(builder =>
                 .AllowAnyHeader()
                 .WithMethods("GET", "POST", "OPTIONS")
                 .AllowCredentials();
+            builder.WithOrigins("http://127.0.0.1:8060") //Source
+                .AllowAnyHeader()
+                .WithMethods("GET", "POST", "OPTIONS")
+                .AllowCredentials();
+            builder.WithOrigins("http://codojo.made-by-s.id:8060") //Source
+            .AllowAnyHeader()
+            .WithMethods("GET", "POST", "OPTIONS")
+            .AllowCredentials();
         });
 app.UseRouting();
 app.UseForwardedHeaders();
