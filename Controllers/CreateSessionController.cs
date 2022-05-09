@@ -84,7 +84,12 @@ public class CreateSessionController : ControllerBase
                 break;
         }
 
-        return new JsonResult(new Response { Status = "Success", Message = JsonConvert.SerializeObject(output) });
+        DataTable dt = new DataTable();
+        dt.Columns.Add("ID");
+        dt.Columns.Add("Code");
+        dt.Rows.Add(project_id, output);
+
+        return new JsonResult(new ResponseData { Status = "Success", Data = dt });
     }
     public JsonResult Post()
     {
