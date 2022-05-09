@@ -28,7 +28,7 @@ public class RunSessionController : ControllerBase
                 ps.addNewCode(code);
                 output = ps.run();
                 break;
-            case "dotnet":
+            case "csharp":
                 var dns = new DotnetSession(project_id.ToString());
                 dns.build();
                 // session.run();

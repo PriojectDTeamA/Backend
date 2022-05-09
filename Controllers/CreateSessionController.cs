@@ -70,7 +70,7 @@ public class CreateSessionController : ControllerBase
                 ps.build();
                 output = ps.getCode();
                 break;
-            case "dotnet":
+            case "csharp":
                 var dns = new DotnetSession(project_id);
                 dns.build();
                 output = dns.getCode();

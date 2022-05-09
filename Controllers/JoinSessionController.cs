@@ -59,7 +59,7 @@ public class JoinSessionController : ControllerBase
                 var ps = new PythonSession(project_id.ToString());
                 output = ps.getCode();
                 break;
-            case "dotnet":
+            case "csharp":
                 var dns = new DotnetSession(project_id.ToString());
                 output = dns.getCode();
                 break;
