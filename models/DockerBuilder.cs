@@ -194,7 +194,7 @@ public class DotnetBuilder : DockerBuilder
     }
     public override void addNewCode(string dir, string code)
     {
-        File.WriteAllText($"{dir}/program.cs", code);
+        File.WriteAllText($"{dir}/Program.cs", code);
     }
 
     public override string getCode(string dir)
@@ -206,7 +206,7 @@ public class DotnetBuilder : DockerBuilder
         else
         {
             string output = "";
-            output = File.ReadAllText($"{dir}/program.cs");
+            output = File.ReadAllText($"{dir}/Program.cs");
             return output;
         }
     }
