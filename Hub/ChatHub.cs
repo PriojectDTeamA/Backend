@@ -32,6 +32,9 @@ namespace SignalRChat.Hubs
 
         public async Task JoinRoom(UserConnection userConnection)
         {
+            Console.WriteLine("a new user joined a room:");
+            Console.WriteLine(userConnection.User);
+            Console.WriteLine(userConnection.Room);
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.Room);
 
             _connections[Context.ConnectionId] = userConnection;
