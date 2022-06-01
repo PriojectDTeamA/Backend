@@ -18,16 +18,17 @@ namespace SignalRChat.Hubs
             _connections = connections;
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
             if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
             {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, userConnection.Room);
                 _connections.Remove(Context.ConnectionId);
                 Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", _botUser, $"{userConnection.User} has left");
                 SendUsersConnected(userConnection.Room);
             }
 
-            return base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception);
         }
 
         public async Task JoinRoom(UserConnection userConnection)
