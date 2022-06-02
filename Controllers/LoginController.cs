@@ -33,7 +33,7 @@ public class LoginController : ControllerBase
         string password = l.password;
         // var result = new { userID };
 
-        string query = @"SELECT * FROM Users WHERE username=@username AND hashedPW=@password";
+        string query = @"SELECT * FROM Users WHERE username= BINARY @username AND hashedPW= BINARY @password";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
