@@ -11,14 +11,14 @@ namespace Backend.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class RecentProj : ControllerBase
+public class RecentProjects : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private MySqlDataReader myReader;
     private DataTable table { get; set; }
     private string sqlDataSource { get; set; }
 
-    public RecentProj(IConfiguration configuration)
+    public RecentProjects(IConfiguration configuration)
     {
         _configuration = configuration;
         // create connection
@@ -26,44 +26,20 @@ public class RecentProj : ControllerBase
         table = new DataTable();
     }
 
-    // GET Projects/ProjectID
-    [HttpGet("{ProjectID}")]
-    [HttpGet("{UserID}")]
-    public JsonResult getRecentProject(int ProjectID, int UserID)
-    {
-        string query = @"SELECT * FROM Projects WHERE ID=@ProjectID";
-        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
-        {
-            mycon.Open();
-            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-            {
-                myCommand.Parameters.AddWithValue("@ProjectID", ProjectID);
-                myReader = myCommand.ExecuteReader();
-                table.Load(myReader);
-
-                myReader.Close();
-                mycon.Close();
-            }
-        }
-        string JSONString = string.Empty;
-        JSONString = JsonConvert.SerializeObject(table);
-        return new JsonResult(new Response { Status = "Success", Message = JSONString });
-    }
-
     // TODO: een GET request voor alle projecten van 1 bepaalde gebruiker door middel van de ID van die gebruiker
     // Misschien dat dit beter bij ProjectController past idk. ff bespreken waar deze request t beste past
     // GET projects/UserID
     [HttpGet("GetRecentProjects/{UserID}")]
-    [HttpGet("GetRecentProjects/{Timestamp}")]
+
     public JsonResult getAllProjectsOfUser(int UserID)
     {
-        string query = @"SELECT * FROM RecentProjects ORDER BY Timestamp LIMIT 5";
+        string query = @"SELECT * FROM RecentProjects WHERE UserID=@UserID ORDER BY DESC Timestamp LIMIT 5";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
-                myCommand.Parameters.AddWithValue("@Timestamp", Timestamp);
+                myCommand.Parameters.AddWithValue("@UserID", UserID);
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);
 
