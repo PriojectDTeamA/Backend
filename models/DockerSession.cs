@@ -82,3 +82,11 @@ public class JavascriptSession : DockerSession
 
     }
 }
+
+public class JavaSession : DockerSession
+{
+    public JavaSession(string sessionName) : base(sessionName, new JavaBuilder(sessionName))
+    {
+
+    }
+}

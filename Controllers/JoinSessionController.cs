@@ -67,6 +67,10 @@ public class JoinSessionController : ControllerBase
                 var jss = new JavascriptSession(project_id.ToString());
                 output = jss.getCode();
                 break;
+            case "java":
+                var jcs = new JavaSession(project_id.ToString());
+                output = jcs.getCode();
+                break;
             default:
                 break;
         }

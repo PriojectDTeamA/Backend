@@ -251,4 +251,48 @@ public class JavascriptBuilder : DockerBuilder
     }
 }
 
+public class JavaBuilder : DockerBuilder
+{
+    public JavaBuilder(string sessionName) : base(new string[] {
+       // "FROM node:16",
+        //"COPY package*.json ./",
+       // "RUN npm install",
+       // "COPY . .",
+       // "CMD [ \"node\", \".\" ]",
 
+        // Base Alpine Linux based image with OpenJDK JRE only
+           "FROM openjdk:8-jre-alpine",
+        //copy application WAR (with libraries inside)
+        "COPY target/spring-boot-*.war /app.war",
+        // specify default command
+        "CMD [\"/usr/bin/java\", \"-jar\", \"-Dspring.profiles.active=test/\", \"/app.war\"]",
+    })
+    {
+
+    }
+
+    public override void addTemplateFiles(string dir)
+    {
+        string sourcepath = "templates/java";
+        string targetpath = $"{dir}";
+        base.CopyDir(sourcepath, targetpath);
+    }
+
+    public override void addNewCode(string dir, string code)
+    {
+        File.WriteAllText($"{dir}/bin/java", code); // Java
+    }
+    public override string getCode(string dir)
+    {
+        if (!Directory.Exists(dir))
+        {
+            return "Error! No file found";
+        }
+        else
+        {
+            string output = "";
+            output = File.ReadAllText($"{dir}/bin/java"); // Java
+            return output;
+        }
+    }
+}
