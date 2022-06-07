@@ -260,9 +260,9 @@ public class JavaBuilder : DockerBuilder
        // "COPY . .",
        // "CMD [ \"node\", \".\" ]",
        "FROM openjdk:17",
-       "COPY ..",
+       "COPY . /tmp",
        "WORKDIR /tmp",
-       "ENTRYPOINT [\"java\",\"Program\"]"
+       "ENTRYPOINT [\"java\",\"Program.java\"]"
     })
     {
 
