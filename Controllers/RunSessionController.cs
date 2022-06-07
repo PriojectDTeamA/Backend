@@ -35,19 +35,19 @@ public class RunSessionController : ControllerBase
                 dns.addNewCode(code);
                 output = dns.run();
                 break;
-            case "javascript":
-                var jss = new JavascriptSession(project_id.ToString());
-                jss.build();
-                // session.run();
-                jss.addNewCode(code);
-                output = jss.run();
-                break;
             case "java":
                 var jcs = new JavaSession(project_id.ToString());
                 jcs.build();
                 // session.run();
                 jcs.addNewCode(code);
                 output = jcs.run();
+                break;
+            case "javascript":
+                var jss = new JavascriptSession(project_id.ToString());
+                jss.build();
+                // session.run();
+                jss.addNewCode(code);
+                output = jss.run();
                 break;
             default:
                 break;

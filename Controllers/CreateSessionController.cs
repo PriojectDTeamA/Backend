@@ -75,15 +75,15 @@ public class CreateSessionController : ControllerBase
                 dns.build();
                 output = dns.getCode();
                 break;
-            case "javascript":
-                var jss = new JavascriptSession(project_id);
-                jss.build();
-                output = jss.getCode();
-                break;
             case "java":
                 var jcs = new JavaSession(project_id);
                 jcs.build();
                 output = jcs.getCode();
+                break;
+            case "javascript":
+                var jss = new JavascriptSession(project_id);
+                jss.build();
+                output = jss.getCode();
                 break;
             default:
                 break;

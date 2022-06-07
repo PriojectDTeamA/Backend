@@ -63,13 +63,13 @@ public class JoinSessionController : ControllerBase
                 var dns = new DotnetSession(project_id.ToString());
                 output = dns.getCode();
                 break;
-            case "javascript":
-                var jss = new JavascriptSession(project_id.ToString());
-                output = jss.getCode();
-                break;
             case "java":
                 var jcs = new JavaSession(project_id.ToString());
                 output = jcs.getCode();
+                break;
+            case "javascript":
+                var jss = new JavascriptSession(project_id.ToString());
+                output = jss.getCode();
                 break;
             default:
                 break;
