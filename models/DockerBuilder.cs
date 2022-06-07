@@ -260,9 +260,9 @@ public class JavaBuilder : DockerBuilder
        // "COPY . .",
        // "CMD [ \"node\", \".\" ]",
        "FROM openjdk:17",
-       "COPY ./out/production/DockerHelloJava/ /tmp\"",
+       "COPY ..",
        "WORKDIR /tmp",
-       "ENTRYPOINT [\"java\",\"HelloWorld\"]"
+       "ENTRYPOINT [\"java\",\"Program\"]"
     })
     {
 
@@ -277,7 +277,7 @@ public class JavaBuilder : DockerBuilder
 
     public override void addNewCode(string dir, string code)
     {
-        File.WriteAllText($"{dir}/bin/java", code); // Java
+        File.WriteAllText($"{dir}/Program.java", code); // Java
     }
     public override string getCode(string dir)
     {
@@ -288,7 +288,7 @@ public class JavaBuilder : DockerBuilder
         else
         {
             string output = "";
-            output = File.ReadAllText($"{dir}/bin/java"); // Java
+            output = File.ReadAllText($"{dir}/Program.java"); // Java
             return output;
         }
     }

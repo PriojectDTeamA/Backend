@@ -43,7 +43,7 @@ public class RunSessionController : ControllerBase
                 output = jss.run();
                 break;
             case "java":
-                var jcs = new JavascriptSession(project_id.ToString());
+                var jcs = new JavaSession(project_id.ToString());
                 jcs.build();
                 // session.run();
                 jcs.addNewCode(code);

@@ -81,7 +81,7 @@ public class CreateSessionController : ControllerBase
                 output = jss.getCode();
                 break;
             case "java":
-                var jcs = new JavascriptSession(project_id);
+                var jcs = new JavaSession(project_id);
                 jcs.build();
                 output = jcs.getCode();
                 break;
