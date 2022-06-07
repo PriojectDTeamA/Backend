@@ -42,6 +42,13 @@ public class RunSessionController : ControllerBase
                 jss.addNewCode(code);
                 output = jss.run();
                 break;
+            case "java":
+                var jcs = new JavascriptSession(project_id.ToString());
+                jcs.build();
+                // session.run();
+                jcs.addNewCode(code);
+                output = jcs.run();
+                break;
             default:
                 break;
         }
