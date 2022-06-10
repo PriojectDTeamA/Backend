@@ -71,7 +71,7 @@ public class UsersController : ControllerBase
         }
         else
         {
-            return new JsonResult(new Response { Status = "Failed", Message = $"User not found {Username}" });
+            return new JsonResult(new Response { Status = "Failed", Message = $"User not found: {Username}" });
         }
     }
 }
