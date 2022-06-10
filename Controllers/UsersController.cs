@@ -51,7 +51,7 @@ public class UsersController : ControllerBase
     [HttpGet("Username/{Username}")]
     public JsonResult getSingleUser(string Username)
     {
-        string query = @"SELECT * FROM Users WHERE username=@Username";
+        string query = @"SELECT * FROM Users WHERE username = BINARY @Username";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
