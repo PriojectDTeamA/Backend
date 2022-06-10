@@ -65,7 +65,14 @@ public class UsersController : ControllerBase
                 mycon.Close();
             }
         }
-        return new JsonResult(new ResponseData { Status = "Success", Data = table });
+        if (table.Rows.Count != 0)
+        {
+            return new JsonResult(new ResponseData { Status = "Success", Data = table });
+        }
+        else
+        {
+            return new JsonResult(new Response { Status = "Failed", Message = $"User not found {Username}" });
+        }
     }
 }
 
