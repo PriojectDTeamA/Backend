@@ -46,6 +46,27 @@ public class UsersController : ControllerBase
         }
         return new JsonResult(new ResponseData { Status = "Success", Data = table });
     }
+
+    // GET Users/Username/{Username}
+    [HttpGet("Username/{Username}")]
+    public JsonResult getSingleUser(string Username)
+    {
+        string query = @"SELECT * FROM Users WHERE username=@Username";
+        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+        {
+            mycon.Open();
+            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+            {
+                myCommand.Parameters.AddWithValue("@Username", Username);
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader);
+
+                myReader.Close();
+                mycon.Close();
+            }
+        }
+        return new JsonResult(new ResponseData { Status = "Success", Data = table });
+    }
 }
 
 
