@@ -56,7 +56,7 @@ public class ProjectsController : ControllerBase
     [HttpGet("GetProjects/{UserID}")]
     public JsonResult getAllProjectsOfUser(int UserID)
     {
-        string query = @"SELECT * FROM Projects WHERE Owner=@UserID";
+        string query = @"SELECT * FROM Projects WHERE Owner=@UserID ORDER BY Timestamp DESC";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
@@ -78,6 +78,34 @@ public class ProjectsController : ControllerBase
         return new JsonResult(new ResponseData { Status = "Success", Data = table });
 
     }
+
+    [HttpPost("UpdateTimestamp")]
+    public JsonResult UpdateTimestamp([FromBody] SharedProject proj)
+    {
+        string query = @"UPDATE Projects SET Timestamp = @timestamp WHERE ID = @ProjectID AND Owner = @UserID; ";
+
+        var timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+        var projectID = proj.ProjectID;
+        var userID = proj.UserID;
+
+        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+        {
+            mycon.Open();
+            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+            {
+                myCommand.Parameters.AddWithValue("@timestamp", timestamp);
+                myCommand.Parameters.AddWithValue("@ProjectID", projectID);
+                myCommand.Parameters.AddWithValue("@UserID", userID);
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader);
+
+                myReader.Close();
+                mycon.Close();
+            }
+        }
+        return new JsonResult(new Response { Status = "Success", Message = $"Updated project timestamp for {projectID}" });
+    }
+
 }
 
 
