@@ -101,7 +101,10 @@ public class SharedProj : ControllerBase
     public JsonResult getAllProjectsOfUser(int UserID)
     {
         //Query for the Shared projects ordered by timestamp. Joined with Projects table for "Language"
-        string query = @"SELECT * FROM Projects INNER JOIN RecentProjects ON RecentProjects.ProjectID=Projects.ID WHERE NOT RecentProjects.UserID=@UserID ORDER BY RecentProjects.Timestamp DESC";
+        string query = @"SELECT * FROM Projects INNER JOIN RecentProjects ON 
+                            RecentProjects.ProjectID=Projects.ID 
+                            WHERE NOT Projects.owner=@UserID AND RecentProjects.UserID=@UserID 
+                            ORDER BY RecentProjects.Timestamp DESC";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             //establishing connection with the database
