@@ -11,14 +11,14 @@ namespace Backend.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class RecentProj : ControllerBase
+public class SharedProj : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private MySqlDataReader myReader;
     private DataTable table { get; set; }
     private string sqlDataSource { get; set; }
 
-    public RecentProj(IConfiguration configuration)
+    public SharedProj(IConfiguration configuration)
     {
         _configuration = configuration;
         // create connection
@@ -27,10 +27,10 @@ public class RecentProj : ControllerBase
     }
 
     //Creating API call for when a user enters a room
-    [HttpPost("SetRecentProject")]
+    [HttpPost("SetSharedProject")]
 
     //Function for Modifying and adding data to database
-    public JsonResult SetRecentProject([FromBody] RecentProject proj)
+    public JsonResult SetSharedProject([FromBody] SharedProject proj)
     {
         string query = @"SELECT * FROM RecentProjects WHERE UserID=@UserID AND ProjectID=@ProjectID";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
@@ -94,14 +94,17 @@ public class RecentProj : ControllerBase
         return new JsonResult(new Response { Status = "Success", Message = "Values Added or Modified" });
     }
 
-    //Creating API call for Displaying recent projects
-    [HttpGet("GetRecentProjects/{UserID}")]
+    //Creating API call for Displaying Shared projects
+    [HttpGet("GetSharedProjects/{UserID}")]
 
-    //Function for reading recent projects from database
+    //Function for reading Shared projects from database
     public JsonResult getAllProjectsOfUser(int UserID)
     {
-        //Query for the recent projects ordered by timestamp. Joined with Projects table for "Language"
-        string query = @"SELECT * FROM Projects INNER JOIN RecentProjects ON RecentProjects.ProjectID=Projects.ID WHERE RecentProjects.UserID=@UserID ORDER BY RecentProjects.Timestamp DESC LIMIT 5";
+        //Query for the Shared projects ordered by timestamp. Joined with Projects table for "Language"
+        string query = @"SELECT * FROM Projects INNER JOIN RecentProjects ON 
+                            RecentProjects.ProjectID=Projects.ID 
+                            WHERE NOT Projects.owner=@UserID AND RecentProjects.UserID=@UserID 
+                            ORDER BY RecentProjects.Timestamp DESC";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             //establishing connection with the database
@@ -120,11 +123,11 @@ public class RecentProj : ControllerBase
                 mycon.Close();
             }
         }
-        //checks if there are any recent projects
+        //checks if there are any Shared projects
         if (table.Rows.Count == 0)
         {
             //returns error if no projects were found
-            return new JsonResult(new Response { Status = "Failed", Message = "No Recent Projects Found" });
+            return new JsonResult(new Response { Status = "Failed", Message = "No Shared Projects Found" });
         }
 
         //Returns the final data
