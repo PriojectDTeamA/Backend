@@ -27,16 +27,16 @@ public class UsersController : ControllerBase
 
     // TODO: een GET request voor 1 bepaalde gebruiker door middel van ID
     // GET Users/UserID
-    [HttpGet("{UserID}")]
+    [HttpGet("{userID}")]
     public JsonResult getSingleUser(int UserID)
     {
-        string query = @"SELECT * FROM Users WHERE ID=@UserID";
+        string query = @"SELECT * FROM Users WHERE ID=@userID";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
-                myCommand.Parameters.AddWithValue("@UserID", UserID);
+                myCommand.Parameters.AddWithValue("@userID", UserID);
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);
 

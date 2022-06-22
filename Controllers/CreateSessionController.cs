@@ -38,7 +38,7 @@ public class CreateSessionController : ControllerBase
         string timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
 
         // Adding the new project to the database and returning the newly created ID
-        string query = @"INSERT INTO Projects (name, owner, language, Timestamp) VALUES (@name, @owner, @language, @timestamp);
+        string query = @"INSERT INTO Projects (name, owner, language, createdOn) VALUES (@name, @owner, @language, @createdOn);
             SELECT ID FROM Projects WHERE ID = @@identity";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
@@ -48,7 +48,7 @@ public class CreateSessionController : ControllerBase
                 myCommand.Parameters.AddWithValue("@name", project_name);
                 myCommand.Parameters.AddWithValue("@owner", project_owner_id);
                 myCommand.Parameters.AddWithValue("@language", language);
-                myCommand.Parameters.AddWithValue("@timestamp", timestamp);
+                myCommand.Parameters.AddWithValue("@createdOn", timestamp);
 
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);

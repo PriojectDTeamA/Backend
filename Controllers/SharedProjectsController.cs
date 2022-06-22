@@ -36,9 +36,9 @@ public class SharedProj : ControllerBase
         string Timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
 
         //make new database value or update an existing one
-        string query = @"INSERT INTO RecentProjects (ProjectID,UserID,Timestamp) 
-                        VALUES (@ProjectID,@UserID,@Timestamp)
-                        ON DUPLICATE KEY UPDATE Timestamp=@Timestamp;";
+        string query = @"INSERT INTO RecentProjects (projectID,userID,lastJoined) 
+                        VALUES (@projectID,@userID,@lastJoined)
+                        ON DUPLICATE KEY UPDATE lastJoined=@lastJoined;";
 
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
@@ -47,9 +47,9 @@ public class SharedProj : ControllerBase
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
                 //Replacing values with data
-                myCommand.Parameters.AddWithValue("@UserID", proj.UserID);
-                myCommand.Parameters.AddWithValue("@ProjectID", proj.ProjectID);
-                myCommand.Parameters.AddWithValue("@Timestamp", Timestamp);
+                myCommand.Parameters.AddWithValue("@userID", proj.UserID);
+                myCommand.Parameters.AddWithValue("@projectID", proj.ProjectID);
+                myCommand.Parameters.AddWithValue("@lastJoined", Timestamp);
 
                 //running the Query
                 myReader = myCommand.ExecuteReader();
@@ -73,9 +73,9 @@ public class SharedProj : ControllerBase
         //Query for the Shared projects ordered by timestamp. Joined with Projects table for "Language"
         string query = @"SELECT * 
                         FROM Projects 
-                        INNER JOIN RecentProjects ON RecentProjects.ProjectID=Projects.ID 
-                        WHERE NOT Projects.owner=@UserID AND RecentProjects.UserID=@UserID 
-                        ORDER BY RecentProjects.Timestamp DESC";
+                        INNER JOIN RecentProjects ON RecentProjects.projectID=Projects.ID 
+                        WHERE NOT Projects.owner=@userID AND RecentProjects.userID=@userID 
+                        ORDER BY RecentProjects.lastJoined DESC";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             //establishing connection with the database
@@ -83,7 +83,7 @@ public class SharedProj : ControllerBase
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
                 //replacing values with data
-                myCommand.Parameters.AddWithValue("@UserID", UserID);
+                myCommand.Parameters.AddWithValue("@userID", UserID);
 
                 //running the query
                 myReader = myCommand.ExecuteReader();

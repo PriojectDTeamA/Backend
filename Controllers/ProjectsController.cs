@@ -56,13 +56,13 @@ public class ProjectsController : ControllerBase
     [HttpGet("GetProjects/{UserID}")]
     public JsonResult getAllProjectsOfUser(int UserID)
     {
-        string query = @"SELECT * FROM Projects WHERE Owner=@UserID ORDER BY Timestamp DESC";
+        string query = @"SELECT * FROM Projects WHERE Owner=@userID ORDER BY createdOn DESC";
         using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
         {
             mycon.Open();
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
-                myCommand.Parameters.AddWithValue("@UserID", UserID);
+                myCommand.Parameters.AddWithValue("@userID", UserID);
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);
 
@@ -82,7 +82,7 @@ public class ProjectsController : ControllerBase
     [HttpPost("UpdateTimestamp")]
     public JsonResult UpdateTimestamp([FromBody] SharedProject proj)
     {
-        string query = @"UPDATE Projects SET Timestamp = @timestamp WHERE ID = @ProjectID AND Owner = @UserID; ";
+        string query = @"UPDATE Projects SET createdOn = @createdOn WHERE ID = @projectID AND Owner = @userID; ";
 
         var timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         var projectID = proj.ProjectID;
@@ -93,9 +93,9 @@ public class ProjectsController : ControllerBase
             mycon.Open();
             using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
             {
-                myCommand.Parameters.AddWithValue("@timestamp", timestamp);
-                myCommand.Parameters.AddWithValue("@ProjectID", projectID);
-                myCommand.Parameters.AddWithValue("@UserID", userID);
+                myCommand.Parameters.AddWithValue("@createdOn", timestamp);
+                myCommand.Parameters.AddWithValue("@projectID", projectID);
+                myCommand.Parameters.AddWithValue("@userID", userID);
                 myReader = myCommand.ExecuteReader();
                 table.Load(myReader);
 
