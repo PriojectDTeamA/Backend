@@ -51,7 +51,7 @@ public abstract class DockerBuilder
         r.Start();
 
         // returns false if the program has not finished in n seconds
-        bool checkexit = r.WaitForExit(600000);
+        bool checkexit = r.WaitForExit(20000);
         // checks if the program is still running after n seconds and forcefully terminates it if it is still running.
         if (!checkexit)
         {
