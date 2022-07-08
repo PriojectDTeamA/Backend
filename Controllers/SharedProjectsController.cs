@@ -64,6 +64,46 @@ public class SharedProj : ControllerBase
         return new JsonResult(new Response { Status = "Success", Message = "Values Added or Modified" });
     }
 
+    [HttpPost("RemoveSharedProject")]
+    public JsonResult RemoveSharedProject([FromBody] SharedProject proj)
+    {
+
+
+        //make new database value or update an existing one
+        string query = @"DELETE FROM RecentProjects WHERE userID=@userID AND projectID=@projectID;";
+        int rowsAffected;
+
+        using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+        {
+            //establishing connection with database
+            mycon.Open();
+            using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+            {
+                //Replacing values with data
+                myCommand.Parameters.AddWithValue("@userID", proj.UserID);
+                myCommand.Parameters.AddWithValue("@projectID", proj.ProjectID);
+
+                rowsAffected = myCommand.ExecuteNonQuery();       
+
+                //running the Query
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader);
+
+                //closing connection with database
+                myReader.Close();
+                mycon.Close();
+            }
+        }
+
+        Console.WriteLine(rowsAffected);
+
+        if(rowsAffected <= 0){
+            return new JsonResult(new Response { Status = "Failed", Message = "Connection could not be found" });
+        }else{
+            return new JsonResult(new Response { Status = "Success", Message = "Connection removed" });
+        }
+    }
+
     //Creating API call for Displaying Shared projects
     [HttpGet("GetSharedProjects/{UserID}")]
 
